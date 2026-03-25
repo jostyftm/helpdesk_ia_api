@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
+use Dedoc\Scramble\Scramble;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -11,7 +12,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        //
+        Scramble::ignoreDefaultRoutes();
     }
 
     /**
@@ -19,6 +20,10 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        //
+        Scramble::registerApi('v2', ['info' => ['title' => 'API v2']])
+        ->expose(
+            ui: '/api/v2/docs',
+            document: '/docs/v2/openapi.json',
+        );
     }
 }
