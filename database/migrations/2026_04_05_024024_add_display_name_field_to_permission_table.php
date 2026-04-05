@@ -11,8 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
+        Schema::table('roles', function (Blueprint $table) {
+            $table->string('description')->nullable()->after('display_name');
+        });
+
         Schema::table('permissions', function (Blueprint $table) {
             $table->string('display_name')->nullable()->after('name');
+            $table->string('description')->nullable()->after('display_name');
         });
     }
 
@@ -21,8 +26,13 @@ return new class extends Migration
      */
     public function down(): void
     {
+        Schema::table('roles', function (Blueprint $table) {
+            $table->dropColumn('description');
+        });
+
         Schema::table('permissions', function (Blueprint $table) {
             $table->dropColumn('display_name');
+            $table->dropColumn('description');
         });
     }
 };

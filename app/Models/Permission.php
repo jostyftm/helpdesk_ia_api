@@ -2,9 +2,9 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
+use Spatie\Permission\Models\Permission as SpatiePermission;
 
-class Permission extends Model
+class Permission extends SpatiePermission
 {
     /**
     * The attributes that are mass assignable.
@@ -16,4 +16,14 @@ class Permission extends Model
         'display_name',
         'description',
     ];
+
+    /**
+     * Get the guard name for the role.
+     * 
+     * @return array<int, string>
+     */
+    public function  guardName(): array
+    {
+        return ['web'];
+    }
 }
