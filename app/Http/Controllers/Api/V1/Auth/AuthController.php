@@ -3,10 +3,14 @@
 namespace App\Http\Controllers\Api\V1\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Auth\ForgotPassword;
 use App\Http\Requests\Auth\LoginRequest;
 use App\Services\AuthService;
 use App\Http\Resources\Auth\AuthResource;
+use App\Http\Requests\Auth\ResetPasswordRequest;
 use Illuminate\Http\Resources\Json\JsonResource;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Response;
 
 class AuthController extends Controller
 {
@@ -16,15 +20,67 @@ class AuthController extends Controller
     {}
 
     /**
+     * Login
+     * 
      * Handle the login request and return an access token if the credentials are valid.
      * 
      * @param LoginRequest $request
      * @return JsonResource
+     * @unauthenticated
      */
     public function login(LoginRequest $request): JsonResource
     {
         $response = $this->authService->login($request);
 
         return AuthResource::make($response);
+    }
+
+    /**
+     * Forgot Password
+     * 
+     * Handle the forgot password request and send a password reset link to the user.
+     * @param ForgotPassword $request
+     * @return JsonResponse
+     * @unauthenticated
+     */
+    public function forgotPassword(ForgotPassword $request): JsonResponse
+    {
+        $this->authService->forgotPassword($request);
+
+        return response()->json([
+            'message' => __('passwords.sent'),
+        ], status: 200);
+    }
+
+    /**
+     * Reset Password
+     * 
+     * Handle the reset password request and reset the user's password if the token is valid.
+     * 
+     * @param ResetPasswordRequest $request
+     * @return JsonResponse
+     * @unauthenticated
+     */
+    public function resetPassword(ResetPasswordRequest $request): JsonResponse
+    {
+        $this->authService->resetPassword($request);
+        
+        return response()->json([
+            'message' => __('passwords.reset'),
+        ], status: 200);
+    }
+
+    /**
+     * Logout
+     * 
+     * Handle the logout request and revoke the user's access token.
+     * 
+     * @return Response
+     */
+    public function logout(): Response
+    {
+        $this->authService->logout();
+
+        return response()->noContent();
     }
 }

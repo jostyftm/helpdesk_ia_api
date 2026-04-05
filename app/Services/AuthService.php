@@ -3,9 +3,10 @@
 namespace App\Services;
 
 use App\Models\User;
+use Illuminate\Auth\Events\PasswordReset;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Password;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\Str;
 use Illuminate\Validation\UnauthorizedException;
@@ -43,11 +44,15 @@ class AuthService
 
         $this->clearRateLimit($throttleKey);
 
-        return $this->crateToken($user);
+        return $this->createToken($user);
     }
 
     /**
-     * 
+     * Validate the rate limit for the given throttle key.
+     *
+     * @param string $throttleKey
+     * @return void
+     * @throws TooManyRequestsHttpException
      */
     private function validateRateLimit(string $throttleKey): void
     {
@@ -58,7 +63,10 @@ class AuthService
     }
 
     /**
-     * 
+     * Clear the rate limit for the given throttle key.
+     *
+     * @param string $throttleKey
+     * @return void
      */
     private function clearRateLimit(string $throttleKey): void
     {
@@ -66,9 +74,12 @@ class AuthService
     }
     
     /**
-     * 
+     * Create an access token for the given user.
+     *
+     * @param User $user
+     * @return array
      */
-    private function crateToken(User $user): array
+    private function createToken(User $user): array
     {
         return [
             'access_token' => $user->createToken(
@@ -77,5 +88,67 @@ class AuthService
             )->plainTextToken,
             'token_type' => 'Bearer',
         ];
+    }
+
+    /**
+     * Handle the forgot password request and send a password reset link to the user.
+     * 
+     * @param Request $request
+     * @return void
+     */
+    public function forgotPassword(Request $request): void
+    {
+        $status = Password::sendResetLink(
+            $request->only('email')
+        );
+
+        // if ($status !== Password::RESET_LINK_SENT) {
+        //     throw ValidationException::withMessages([
+        //         'email' => __($status),
+        //     ]);
+        // }
+    }
+
+    /**
+     * Reset the user's password.
+     *
+     * @param Request $request
+     * @return void
+     */
+    public function resetPassword(Request $request): void
+    {
+        $status = Password::reset(
+            $request->only('email', 'password', 'password_confirmation', 'token'),
+            function (User $user, string $password) {
+                $user->forceFill([
+                    'password' => bcrypt($password)
+                ])->setRememberToken(Str::random(60));
+
+                $user->save();
+                $user->tokens()->delete();
+
+                event(new PasswordReset($user));
+            }
+        );
+
+        if ($status !== Password::PASSWORD_RESET) {
+            throw ValidationException::withMessages([
+                'email' => __($status),
+            ]);
+        }
+    }
+
+    /**
+     * Logout
+     * 
+     * Revoke the user's access token.
+     * 
+     * @return void
+     */
+    public function logout(): void
+    {
+        /** @var \Laravel\Sanctum\PersonalAccessToken $token */
+        $token = Auth::user()->currentAccessToken();
+        $token->delete();
     }
 }
