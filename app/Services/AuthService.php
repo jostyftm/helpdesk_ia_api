@@ -6,6 +6,7 @@ use App\Models\User;
 use Illuminate\Auth\Events\PasswordReset;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Password;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\Str;
@@ -30,7 +31,7 @@ class AuthService
 
         $user = User::where(column: 'email', operator: '=', value: $credentials['email'], boolean: 'and')->first();
 
-        if(!Auth::attempt($credentials)) {
+        if(!$user || !Hash::check($credentials['password'], $user->password)) {
             RateLimiter::hit($throttleKey, $decaySeconds = 60);
 
             throw new UnauthorizedException(message: __('auth.invalid_credentials'), code: 401);
