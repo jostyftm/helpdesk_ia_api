@@ -34,7 +34,9 @@ class AuthService
         if(!$user || !Hash::check($credentials['password'], $user->password)) {
             RateLimiter::hit($throttleKey, $decaySeconds = 60);
 
-            throw new UnauthorizedException(message: __('auth.invalid_credentials'), code: 401);
+            throw ValidationException::withMessages([
+                'email' => __('auth.invalid_credentials'),
+            ]);
         }
 
         if(!$user->is_active) {
@@ -151,5 +153,34 @@ class AuthService
         /** @var \Laravel\Sanctum\PersonalAccessToken $token */
         $token = Auth::user()->currentAccessToken();
         $token->delete();
+    }
+
+    /**
+     * Check the user's session.
+     */
+    public function checkSession(): void
+    {
+        // This method is intentionally left empty. It serves as a placeholder for checking the user's session.
+        $user = Auth::user();
+
+        if (!$user) {
+            throw new UnauthorizedException(message: __('auth.unauthenticated'), code: 401);
+        }
+    }
+
+    /**
+     * Get the authenticated user.
+     * 
+     * @return User
+     */
+    public function me(): User
+    {
+        $user = Auth::user();
+
+        if (!$user) {
+            throw new UnauthorizedException(message: __('auth.unauthenticated'), code: 401);
+        }
+
+        return $user;
     }
 }

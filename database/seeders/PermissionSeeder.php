@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\ModulePermission;
 use App\Models\Permission;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
@@ -16,7 +17,17 @@ class PermissionSeeder extends Seeder
      */
     private $modules = [
         [
-            'name' => 'all',
+            'name' => 'dashboard',
+            'permissions' => [
+                [
+                    'display_name' => 'acceso al dashboard',
+                    'name' => 'dashboard.access',
+                    'description' => 'Permite acceso al dashboard del sistema'
+                ]
+            ]
+        ],
+        [
+            'name' => 'acceso total',
             'permissions' => [
                 [
                     'display_name' => 'acceso total',
@@ -26,7 +37,7 @@ class PermissionSeeder extends Seeder
             ]
         ],
         [
-            'name' => 'users',
+            'name' => 'usuarios',
             'permissions' => [
                 [
                     'display_name' => 'listar usuarios',
@@ -51,7 +62,7 @@ class PermissionSeeder extends Seeder
             ]
         ],
         [
-            'name' => 'roles',
+            'name' => 'roles y permisos',
             'permissions' => [
                 [
                     'display_name' => 'listar roles',
@@ -171,6 +182,21 @@ class PermissionSeeder extends Seeder
                     'description' => 'Permite a los usuarios cerrar chats del sistema'
                 ]
             ]
+        ],
+        [
+            'name' => 'reportes',
+            'permissions' => [
+                [
+                    'display_name' => 'ver reportes',
+                    'name' => 'reports.view',
+                    'description' => 'Permite a los usuarios ver los reportes del sistema'
+                ],
+                [
+                    'display_name' => 'generar reportes',
+                    'name' => 'reports.generate',
+                    'description' => 'Permite a los usuarios generar nuevos reportes en el sistema'
+                ]
+            ]
         ]
     ];
 
@@ -180,12 +206,18 @@ class PermissionSeeder extends Seeder
     public function run(): void
     {
         foreach ($this->modules as $module) {
+            $modulePermission = ModulePermission::create([
+                'name' => $module['name'],
+                'description' => $module['name'] . ' permissions',
+                'icon' => null // Puedes asignar un icono específico para cada módulo si lo deseas
+            ]);
             foreach ($module['permissions'] as $permission) {
                 Permission::create([
+                    'module_permission_id' => $modulePermission->id,
                     'name' => $permission['name'],
                     'guard_name' => 'web',
                     'display_name' => $permission['display_name'],
-                    'description' => $permission['description']
+                    'description' => $permission['description'],
                 ]);
             }
         }

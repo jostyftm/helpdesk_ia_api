@@ -8,6 +8,7 @@ use App\Http\Requests\Auth\LoginRequest;
 use App\Services\AuthService;
 use App\Http\Resources\Auth\AuthResource;
 use App\Http\Requests\Auth\ResetPasswordRequest;
+use App\Http\Resources\User\UserResource;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Response;
@@ -15,7 +16,7 @@ use Illuminate\Http\Response;
 class AuthController extends Controller
 {
     public function __construct(
-        private readonly AuthService $authService
+        public readonly AuthService $authService
     )
     {}
 
@@ -83,4 +84,34 @@ class AuthController extends Controller
 
         return response()->noContent();
     }
+
+    /**
+     * Check Session
+     * 
+     * Check if the user's session is active.
+     * 
+     * @return JsonResponse
+     */
+    public function checkSession(): JsonResponse
+    {
+        $this->authService->checkSession();
+
+        return response()->json([
+            'message' => 'Session is active',
+        ], status: 200);
+    }
+
+    /**
+     * Get the authenticated user
+     * 
+     * Return the authenticated user's information.
+     * 
+     * @return JsonResource
+     */
+    public function me(): JsonResource
+    {
+        $user = $this->authService->me();
+
+        return UserResource::make($user);
+    }   
 }

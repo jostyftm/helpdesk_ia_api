@@ -1,12 +1,11 @@
 <?php
 
-namespace App\Http\Resources\Role;
+namespace App\Http\Resources\Permission;
 
-use App\Http\Resources\Permission\PermissionResource;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class RoleResource extends JsonResource
+class ModulePermissionResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -17,35 +16,33 @@ class RoleResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'type' => 'role',
-            'attributes' => $this->getAttributes(),
+            'type' => 'module_permission',
+            'attributes' => $this->getAttribute(),
             'relationships' => $this->getRelationships(),
         ];
     }
 
     /**
-     * The resource's attributes.
+     * 
      */
-    public function getAttributes(): array
+    private function getAttribute(): array
     {
         return [
             'name' => $this->name,
             'description' => $this->description,
-            'total_user'    => $this->users()->count(),
+            'icon' => $this->icon,
             'created_at' => !is_null($this->created_at) ? $this->created_at->diffForHumans() : null,
             'updated_at' => !is_null($this->updated_at) ? $this->updated_at->diffForHumans() : null,
         ];
     }
 
     /**
-     * The resource's relationships.
      * 
-     * @return array<string, mixed>
      */
-    public function getRelationships(): array
+    private function getRelationships(): array
     {
         return [
-            'permissions' => PermissionResource::collection($this->whenLoaded('permissions')),
+            'permissions' => PermissionResource::collection($this->permissions),
         ];
     }
 }

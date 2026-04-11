@@ -12,7 +12,7 @@ class RoleCreateRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -23,7 +23,20 @@ class RoleCreateRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            /**
+             * The name of the role.
+             * 
+             * @example admin
+             */
+            'name' => ['required', 'string', 'max:255', 'unique:roles,name'],
+
+            /**
+             * Description of the role.
+             * 
+             * @example Administrator role with full access to all resources.
+             */
+            'description' => ['nullable', 'string', 'max:255'],
+
         ];
     }
 }

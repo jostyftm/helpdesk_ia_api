@@ -22,7 +22,7 @@ trait HasSearchable
      */
     public function search(
         Request $request,
-        array $relationships = [],
+        ?array $relationships = [],
         ?Closure $callback = null,
         ?array $filters = [],
         ?array $sorts = []
@@ -38,12 +38,12 @@ trait HasSearchable
         }
 
         if (!empty($filters)) {
-            $builder->allowedFilters($filters);
+            $builder->allowedFilters(...$filters);
         }
 
         if ($request->has('sort')) {
             $sorts = array_merge($sorts, [$request->input('sort')]);
-            $builder->allowedSorts($sorts);
+            $builder->allowedSorts(...$sorts);
         }
 
         if ($request->boolean('paginate')) {

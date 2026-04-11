@@ -16,6 +16,7 @@ return new class extends Migration
         });
 
         Schema::table('permissions', function (Blueprint $table) {
+            $table->foreignId('module_permission_id')->constrained('module_permissions')->after('id');
             $table->string('display_name')->nullable()->after('name');
             $table->string('description')->nullable()->after('display_name');
         });
@@ -31,6 +32,7 @@ return new class extends Migration
         });
 
         Schema::table('permissions', function (Blueprint $table) {
+            $table->dropColumn('module_permission_id');
             $table->dropColumn('display_name');
             $table->dropColumn('description');
         });

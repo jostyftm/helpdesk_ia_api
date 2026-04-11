@@ -2,14 +2,11 @@
 
 namespace App\Http\Requests\Role;
 
-use App\Traits\HasListParameter;
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
 
-class RoleListRequest extends FormRequest
+class SyncPermissionRequest extends FormRequest
 {
-    use HasListParameter;
-
     /**
      * Determine if the user is authorized to make this request.
      */
@@ -27,20 +24,18 @@ class RoleListRequest extends FormRequest
     {
         return [
             /**
-             * The name of the role to filter by.
+             * The permissions field is required and must be an array. Each element of the array should be a valid permission ID.
              * 
-             * @example admin
+             * 
              */
-            'filter.name' => 'nullable|string',
+            'permissions' => ['required', 'array'],
 
             /**
-             * The description of the role to filter by.
+             * Each permission ID must be an integer and exist in the permissions table.
              * 
-             * @example Administrator role
+             * 
              */
-            'filter.description' => 'nullable|string',
-
-            ...$this->getListParams(),
+            'permissions.*.id' => ['integer', 'exists:permissions,id'],
         ];
     }
 }
