@@ -2,14 +2,11 @@
 
 namespace App\Http\Requests\User;
 
-use App\Traits\HasListParameter;
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
 
-class UserListRequest extends FormRequest
+class UpdatePasswordRequest extends FormRequest
 {
-
-    use HasListParameter;
     /**
      * Determine if the user is authorized to make this request.
      */
@@ -27,27 +24,18 @@ class UserListRequest extends FormRequest
     {
         return [
             /**
-             * The name of the role to filter by.
+             * Password for the user.
              * 
-             * @example admin
+             * @example password123
              */
-            'filter.name' => 'nullable|string',
+            'password' => ['required','string','min:8', 'confirmed'],
 
             /**
-             * The last name of the user to filter by.
+             * Confirmation of the password.
              * 
-             * @example Doe
+             * @example password123
              */
-            'filter.last_name' => 'nullable|string',
-
-            /**
-             * The email of the user to filter by.
-             * 
-             * @example jhondoe@mail.com
-             */
-            'filter.email' => 'nullable|string',
-
-            ...$this->getListParams(),
+            'password_confirmation' => ['required','string','min:8'],
         ];
     }
 }
