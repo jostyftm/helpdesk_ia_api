@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Http\Requests\TicketSource;
+namespace App\Http\Requests\TicketCategory;
 
 use App\Traits\HasListParameter;
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
 
-class TicketSourceListRequest extends FormRequest
+class TicketCategoryListRequest extends FormRequest
 {
 
     use HasListParameter;
