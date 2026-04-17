@@ -14,12 +14,17 @@ class TicketCategoryController extends Controller
 {
 
     public function __construct(
-        protected readonly TicketCategoryService $service,
+        public readonly TicketCategoryService $service,
     ) {}
 
 
     /**
+     * List all ticket categories.
+     * 
      * Display a listing of the resource.
+     * 
+     * @param  TicketCategoryListRequest  $request
+     * @return AnonymousResourceCollection
      */
     public function index(TicketCategoryListRequest $request): AnonymousResourceCollection
     {
