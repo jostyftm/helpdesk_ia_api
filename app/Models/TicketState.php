@@ -3,12 +3,13 @@
 namespace App\Models;
 
 use App\Traits\HasSearchable;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class TicketState extends Model
 {
 
-    use HasSearchable;
+    use HasSearchable, HasFactory;
 
     /**
      * The attributes that are mass assignable.
