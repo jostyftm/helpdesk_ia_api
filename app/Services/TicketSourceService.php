@@ -11,9 +11,9 @@ class TicketSourceService
 {
     /**
      * List all ticket sources.
-      * 
-      * @param  Request  $request
-      * @return Collection|AbstractPaginator
+     * 
+     * @param  Request  $request
+     * @return Collection|AbstractPaginator
      */
     public function index(Request $request): Collection | AbstractPaginator
     {

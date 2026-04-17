@@ -27,6 +27,8 @@ class TicketSourceResource extends JsonResource
         return [
             'name' => $this->name,
             'icon' => $this->icon,
+            'created_at' => !is_null($this->created_at) ? $this->created_at->diffForHumans() : null,
+            'updated_at' => !is_null($this->updated_at) ? $this->updated_at->diffForHumans() : null,
         ];
     }
 
