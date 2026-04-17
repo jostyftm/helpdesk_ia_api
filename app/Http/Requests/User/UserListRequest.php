@@ -47,6 +47,13 @@ class UserListRequest extends FormRequest
              */
             'filter.email' => 'nullable|string',
 
+            /**
+             * The role id of the user to filter by.
+             * 
+             * @example 1
+             */
+            'filter.role_id' => ['nullable', 'integer', 'exists:roles,id'],
+
             ...$this->getListParams(),
         ];
     }

@@ -14,7 +14,7 @@ trait HasListParameter
              *
              * @example true
              */
-            "paginate"          => "nullable|in:true,false,1,0",
+            "paginate"          => "nullable|in:true,false",
             /**
              * Page number to retrieve when pagination is enabled.
              *

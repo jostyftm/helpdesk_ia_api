@@ -9,6 +9,7 @@ use App\Http\Controllers\Api\V1\TicketCategory\TicketCategoryController;
 use App\Http\Controllers\Api\V1\TicketSource\TicketSourceController;
 use App\Http\Controllers\Api\V1\TicketPriority\TicketPriorityController;
 use App\Http\Controllers\Api\V1\TicketState\TicketStateController;
+use App\Http\Controllers\Api\V1\Ticket\TicketController;
 
 Route::prefix('auth')->group(function () {
     Route::post('login', [AuthController::class, 'login']);
@@ -39,4 +40,6 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::apiResource('ticket-categories', TicketCategoryController::class)->only(['index']);
     Route::apiResource('ticket-priorities', TicketPriorityController::class)->only(['index']);
     Route::apiResource('ticket-states', TicketStateController::class)->only(['index']);
+
+    Route::apiResource('tickets', TicketController::class);
 });

@@ -6,22 +6,28 @@ use App\Models\User;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Request;
 use Illuminate\Pagination\AbstractPaginator;
+use Spatie\QueryBuilder\AllowedFilter;
 
 class UserService
 {
-    
+
     /**
-    * List all users.
-    * 
-    * @param  Request  $request
-    * @return Collection|AbstractPaginator
-    */
+     * List all users.
+     * 
+     * @param  Request  $request
+     * @return Collection|AbstractPaginator
+     */
     public function index(Request $request): Collection | AbstractPaginator
     {
         $users = (new User())->search(
             request: $request,
             relationships: ['roles'],
-            filters: ['name', 'last_name', 'email', 'roles.name'],
+            filters: [
+                'name',
+                'last_name',
+                'email',
+                AllowedFilter::exact('role_id', 'roles.id')
+            ],
         );
 
         return $users;
@@ -110,7 +116,7 @@ class UserService
         ]);
 
         return $user;
-    } 
+    }
 
     /**
      * Activate the specified user.
