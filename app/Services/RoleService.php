@@ -3,8 +3,8 @@
 namespace App\Services;
 
 use App\Models\Role;
-use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Request;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Pagination\AbstractPaginator;
 use Illuminate\Validation\ValidationException;
 
