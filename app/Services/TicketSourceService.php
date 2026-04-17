@@ -19,6 +19,7 @@ class TicketSourceService
     {
         $sources = (new TicketSource())->search(
             request: $request,
+            filters: ['name'],
         );
 
         return $sources;
