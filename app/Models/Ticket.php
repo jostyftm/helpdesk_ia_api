@@ -2,12 +2,20 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Database\Factories\TicketFactory;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Ticket extends Model
 {
+    /** 
+     * @use HasFactory<TicketFactory> 
+     */
+    use HasFactory;
+
     /**
      * The attributes that are mass assignable.
      * 
@@ -71,5 +79,15 @@ class Ticket extends Model
     public function priority(): BelongsTo
     {
         return $this->belongsTo(TicketPriority::class);
+    }
+
+    /**
+     * Get the users associated with the ticket.
+     * 
+     * @return HasMany
+     */
+    public function users(): HasMany
+    {
+        return $this->hasMany(TicketUser::class);
     }
 }

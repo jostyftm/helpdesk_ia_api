@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('ticket_states', function (Blueprint $table) {
             $table->id();
-            $table->string('name')->unique();
+            $table->string('name');
             $table->string('display_name')->unique();
             $table->boolean('pause_sla')->default(false);
             $table->string('text_color')->nullable();

@@ -24,6 +24,13 @@ class DatabaseSeeder extends Seeder
             PermissionSeeder::class,
             RoleSeeder::class,
             UserSeeder::class,
+
+            TicketSourceSeeder::class,
+            TicketCategorySeeder::class,
+            TicketPrioritySeeder::class,
+            TicketUserRoleSeeder::class,
+            TicketStateSeeder::class,
+            TicketSeeder::class,
         ]);
     }
 }

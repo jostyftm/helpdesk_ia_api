@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('ticket_priorities', function (Blueprint $table) {
             $table->id();
             $table->string('name')->unique();
+            $table->string('display_name');
             $table->integer('weight')->default(0);
             $table->string('text_color')->nullable();
             $table->string('bg_color')->nullable();
