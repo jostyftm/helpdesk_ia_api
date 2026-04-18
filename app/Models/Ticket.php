@@ -100,6 +100,16 @@ class Ticket extends Model
     }
 
     /**
+     * Get the resolutions associated with the ticket.
+     * 
+     * @return HasMany
+     */
+    public function ticketResolutions(): HasMany
+    {
+        return $this->hasMany(TicketResolution::class);
+    }
+
+    /**
      * Get the technician responsible for the ticket.
      * 
      * @return HasMany
@@ -141,5 +151,19 @@ class Ticket extends Model
         }
 
         return $query;
+    }
+
+    /**
+     * Scope a query to filter tickets by their associated user.
+     * 
+     * @param  Builder  $query
+     * @param  int  $userId
+     * @return Builder
+     */
+    public function scopeFilterByUser(Builder $query, int $userId): Builder
+    {
+        return $query->whereHas('ticketUsers', function ($q) use ($userId) {
+            $q->where('user_id', $userId);
+        });
     }
 }

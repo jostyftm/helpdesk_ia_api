@@ -18,10 +18,21 @@ class ModulePermission extends Model
      * @var array<int, string>
      */
     protected $fillable = [
+        'order',
         'name',
+        'path',
+        'show_sidebar',
         'description',
         'icon'
     ];
+
+    public function casts(): array
+    {
+        return [
+            'show_sidebar' => 'boolean',
+            'order' => 'integer',
+        ];
+    }
 
     /**
      * Get the permissions for the module permission.

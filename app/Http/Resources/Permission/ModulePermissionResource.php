@@ -31,6 +31,9 @@ class ModulePermissionResource extends JsonResource
             'name' => $this->name,
             'description' => $this->description,
             'icon' => $this->icon,
+            'path' => $this->path,
+            'order' => $this->order,
+            'show_sidebar' => $this->show_sidebar,
             'created_at' => !is_null($this->created_at) ? $this->created_at->diffForHumans() : null,
             'updated_at' => !is_null($this->updated_at) ? $this->updated_at->diffForHumans() : null,
         ];

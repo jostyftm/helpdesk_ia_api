@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Models\ModulePermission;
 use App\Models\User;
 use Illuminate\Auth\Events\PasswordReset;
 use Illuminate\Http\Request;
@@ -26,12 +27,12 @@ class AuthService
     {
         $credentials = $request->only(['email', 'password']);
 
-        $throttleKey = Str::transliterate(Str::lower($request->input('email')).'|'.$request->ip());
+        $throttleKey = Str::transliterate(Str::lower($request->input('email')) . '|' . $request->ip());
         $this->validateRateLimit($throttleKey);
 
         $user = User::where(column: 'email', operator: '=', value: $credentials['email'], boolean: 'and')->first();
 
-        if(!$user || !Hash::check($credentials['password'], $user->password)) {
+        if (!$user || !Hash::check($credentials['password'], $user->password)) {
             RateLimiter::hit($throttleKey, $decaySeconds = 60);
 
             throw ValidationException::withMessages([
@@ -39,7 +40,7 @@ class AuthService
             ]);
         }
 
-        if(!$user->is_active) {
+        if (!$user->is_active) {
             throw ValidationException::withMessages([
                 'email' => __('auth.inactive_user'),
             ]);
@@ -59,7 +60,7 @@ class AuthService
      */
     private function validateRateLimit(string $throttleKey): void
     {
-        
+
         if (RateLimiter::tooManyAttempts($throttleKey, 5)) {
             throw new TooManyRequestsHttpException(null, __('auth.too_many_attempts'));
         }
@@ -75,7 +76,7 @@ class AuthService
     {
         RateLimiter::clear($throttleKey);
     }
-    
+
     /**
      * Create an access token for the given user.
      *
@@ -182,5 +183,24 @@ class AuthService
         }
 
         return $user;
+    }
+
+    /**
+     * Get the authenticated user's permissions.
+     * 
+     */
+    public function getModulePermissions()
+    {
+        $user = Auth::user();
+
+        if (!$user) {
+            throw new UnauthorizedException(message: __('auth.unauthenticated'), code: 401);
+        }
+
+        $permissions = $user->getAllPermissions()->pluck('id');
+
+        $modulePermissions = ModulePermission::whereIn(column: 'permission_id', operator: 'in', value: $permissions)->get();
+
+        return $modulePermissions;
     }
 }

@@ -8,6 +8,7 @@ use App\Models\ModulePermission;
 use App\Services\ModulePermissionService;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
+use App\Http\Requests\ModulePermission\ModulePermissionListRequest;
 
 class ModulePermissionController extends Controller
 {
@@ -15,15 +16,15 @@ class ModulePermissionController extends Controller
     public function __construct(
         public ModulePermissionService $modulePermissionService
     ) {}
-    
+
     /**
      * List all module permissions.
      * 
      * @return AnonymousResourceCollection
      */
-    public function index(): AnonymousResourceCollection
+    public function index(ModulePermissionListRequest $request): AnonymousResourceCollection
     {
-        $permissionsModule = $this->modulePermissionService->index(request());
+        $permissionsModule = $this->modulePermissionService->index($request);
 
         return ModulePermissionResource::collection($permissionsModule);
     }

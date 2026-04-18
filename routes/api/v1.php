@@ -10,6 +10,7 @@ use App\Http\Controllers\Api\V1\TicketSource\TicketSourceController;
 use App\Http\Controllers\Api\V1\TicketPriority\TicketPriorityController;
 use App\Http\Controllers\Api\V1\TicketState\TicketStateController;
 use App\Http\Controllers\Api\V1\Ticket\TicketController;
+use App\Http\Controllers\Api\V1\TicketUserRole\TicketUserRoleController;
 
 Route::prefix('auth')->group(function () {
     Route::post('login', [AuthController::class, 'login']);
@@ -23,7 +24,8 @@ Route::prefix('auth')->group(function () {
 Route::middleware('auth:sanctum')->group(function () {
 
     Route::group(['prefix' => 'auth'], function () {
-        Route::post('me', [AuthController::class, 'me']);
+        Route::get('me', [AuthController::class, 'me']);
+        Route::get('modules-permissions', [AuthController::class, 'getModulePermissions']);
         Route::post('logout', [AuthController::class, 'logout']);
         Route::post('check-session', [AuthController::class, 'checkSession']);
     });
@@ -40,6 +42,10 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::apiResource('ticket-categories', TicketCategoryController::class)->only(['index']);
     Route::apiResource('ticket-priorities', TicketPriorityController::class)->only(['index']);
     Route::apiResource('ticket-states', TicketStateController::class)->only(['index']);
+    Route::apiResource('ticket-user-roles', TicketUserRoleController::class)->only(['index']);
 
     Route::apiResource('tickets', TicketController::class);
+    Route::match(['put', 'patch'], 'tickets/{ticket}/categorization', [TicketController::class, 'categorization']);
+    Route::match(['put', 'patch'], 'tickets/{ticket}/assign-technician', [TicketController::class, 'assignTechnician']);
+    Route::post('tickets/{ticket}/resolve', [TicketController::class, 'resolve']);
 });

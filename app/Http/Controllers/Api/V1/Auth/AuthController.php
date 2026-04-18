@@ -8,6 +8,7 @@ use App\Http\Requests\Auth\LoginRequest;
 use App\Services\AuthService;
 use App\Http\Resources\Auth\AuthResource;
 use App\Http\Requests\Auth\ResetPasswordRequest;
+use App\Http\Resources\Permission\ModulePermissionResource;
 use App\Http\Resources\User\UserResource;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Http\JsonResponse;
@@ -17,8 +18,7 @@ class AuthController extends Controller
 {
     public function __construct(
         public readonly AuthService $authService
-    )
-    {}
+    ) {}
 
     /**
      * Login
@@ -65,7 +65,7 @@ class AuthController extends Controller
     public function resetPassword(ResetPasswordRequest $request): JsonResponse
     {
         $this->authService->resetPassword($request);
-        
+
         return response()->json([
             'message' => __('passwords.reset'),
         ], status: 200);
@@ -113,5 +113,19 @@ class AuthController extends Controller
         $user = $this->authService->me();
 
         return UserResource::make($user);
-    }   
+    }
+
+    /**
+     * Get the authenticated user's permissions
+     * 
+     * Return the authenticated user's module permissions.
+     * 
+     */
+    public function getModulePermissions() #: JsonResource
+    {
+        $permissions = $this->authService->getModulePermissions();
+
+        return $permissions;
+        return ModulePermissionResource::collection($permissions);
+    }
 }

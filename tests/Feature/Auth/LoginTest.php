@@ -19,7 +19,7 @@ class LoginTest extends TestCase
     public function test_can_authenticate_user_with_valid_credentials(): void
     {
         $user = User::factory()->create();
-        
+
         $response = $this->postJson('/api/v1/auth/login', [
             'email' => $user->email,
             'password' => 'password',
@@ -38,7 +38,7 @@ class LoginTest extends TestCase
             'password' => 'wrongPassword',
         ]);
 
-        $response->assertStatus(401);
+        $response->assertStatus(422);
     }
 
 
@@ -64,15 +64,14 @@ class LoginTest extends TestCase
         $totalAttemps = 10;
         $limitAttempts = 5;
 
-        for($i = 0; $i < $totalAttemps; $i++) {
+        for ($i = 0; $i < $totalAttemps; $i++) {
             $response = $this->postJson('/api/v1/auth/login', [
                 'email' => $user->email,
                 'password' => 'wrongPassword',
             ]);
 
-            Storage::append('login_attempts.log', 'Attempt: '.($i + 1).' - Email: '.$user->email.' status: '.$response->status());
             if ($i < $limitAttempts) {
-                $response->assertStatus(401);
+                $response->assertStatus(422);
             } else {
                 $response->assertStatus(429);
             }

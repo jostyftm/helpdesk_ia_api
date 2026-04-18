@@ -15,9 +15,9 @@ return new class extends Migration
             $table->id();
             $table->string('subject');
             $table->text('description')->nullable();
-            $table->foreignId('ticket_source_id')->constrained()->onDelete('cascade');
-            $table->foreignId('ticket_category_id')->constrained()->onDelete('cascade');
-            $table->foreignId('ticket_priority_id')->constrained()->onDelete('cascade');
+            $table->foreignId('ticket_source_id')->nullable()->constrained()->onDelete('cascade');
+            $table->foreignId('ticket_category_id')->nullable()->constrained()->onDelete('cascade');
+            $table->foreignId('ticket_priority_id')->nullable()->constrained()->onDelete('cascade');
             $table->timestamps();
         });
 

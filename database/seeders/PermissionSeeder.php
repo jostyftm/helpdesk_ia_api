@@ -18,6 +18,10 @@ class PermissionSeeder extends Seeder
     private $modules = [
         [
             'name' => 'dashboard',
+            'path' => '/dashboard',
+            'icon' => 'LayoutDashboard',
+            'show_sidebar' => true,
+            'order' => 1,
             'permissions' => [
                 [
                     'display_name' => 'acceso al dashboard',
@@ -28,6 +32,10 @@ class PermissionSeeder extends Seeder
         ],
         [
             'name' => 'acceso total',
+            'path' => '/all',
+            'icon' => 'ShieldCheck',
+            'show_sidebar' => false,
+            'order' => 0,
             'permissions' => [
                 [
                     'display_name' => 'acceso total',
@@ -38,6 +46,10 @@ class PermissionSeeder extends Seeder
         ],
         [
             'name' => 'usuarios',
+            'path' => '/dashboard/users',
+            'icon' => 'Users',
+            'show_sidebar' => true,
+            'order' => 4,
             'permissions' => [
                 [
                     'display_name' => 'listar usuarios',
@@ -63,6 +75,10 @@ class PermissionSeeder extends Seeder
         ],
         [
             'name' => 'roles y permisos',
+            'path' => '/dashboard/roles',
+            'icon' => 'Shield',
+            'show_sidebar' => true,
+            'order' => 5,
             'permissions' => [
                 [
                     'display_name' => 'listar roles',
@@ -88,6 +104,10 @@ class PermissionSeeder extends Seeder
         ],
         [
             'name' => 'tickets',
+            'path' => '/dashboard/tickets',
+            'icon' => 'FileQuestionMark',
+            'show_sidebar' => true,
+            'order' => 2,
             'permissions' => [
                 [
                     'display_name' => 'listar tickets',
@@ -139,6 +159,10 @@ class PermissionSeeder extends Seeder
         ],
         [
             'name' => 'chats',
+            'path' => '/dashboard/chats',
+            'show_sidebar' => true,
+            'order' => 3,
+            'icon' => 'MessageSquare',
             'permissions' => [
                 [
                     'display_name' => 'listar chats',
@@ -185,6 +209,10 @@ class PermissionSeeder extends Seeder
         ],
         [
             'name' => 'reportes',
+            'path' => '/dashboard/reports',
+            'icon' => 'FileChartLine',
+            'show_sidebar' => true,
+            'order' => 6,
             'permissions' => [
                 [
                     'display_name' => 'ver reportes',
@@ -208,8 +236,11 @@ class PermissionSeeder extends Seeder
         foreach ($this->modules as $module) {
             $modulePermission = ModulePermission::create([
                 'name' => $module['name'],
+                'path' => $module['path'],
                 'description' => $module['name'] . ' permissions',
-                'icon' => null // Puedes asignar un icono específico para cada módulo si lo deseas
+                'icon' => $module['icon'], // Puedes asignar un icono específico para cada módulo si lo deseas
+                'show_sidebar' => $module['show_sidebar'],
+                'order' => $module['order']
             ]);
             foreach ($module['permissions'] as $permission) {
                 Permission::create([

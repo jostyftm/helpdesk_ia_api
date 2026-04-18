@@ -9,6 +9,8 @@ use App\Http\Resources\TicketState\TicketStateResource;
 use App\Http\Resources\User\UserResource;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
+use App\Http\Resources\TicketUser\TicketUserResource;
+use App\Http\Resources\Ticket\TicketResolutionResource;
 
 class TicketResource extends JsonResource
 {
@@ -57,14 +59,16 @@ class TicketResource extends JsonResource
             'priority' => new TicketPriorityResource($this->whenLoaded('ticketPriority')),
             'category' => new TicketCategoryResource($this->whenLoaded('ticketCategory')),
             'source' => new TicketSourceResource($this->whenLoaded('ticketSource')),
-            // 'users' => TicketUserResource::collection($this->whenLoaded('users')),
+            'ticket_users' => TicketUserResource::collection($this->whenLoaded('ticketUsers')),
             'current_state' => new TicketStateResource(
-                $this->whenLoaded('currentState')->first()
+                $this->whenLoaded('currentState')?->first()
             ),
+
             // 'state_histories' => TicketStateResource::collection($this->whenLoaded('stateHistories')),
             'technician_responsible' => new UserResource(
-                $this->whenLoaded('technicianResponsible')->first()?->user
+                $this->whenLoaded('technicianResponsible')?->first()?->user
             ),
+            'resolutions' => TicketResolutionResource::collection($this->whenLoaded('ticketResolutions')),
         ];
     }
 }

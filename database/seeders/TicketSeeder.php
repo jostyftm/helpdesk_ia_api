@@ -27,12 +27,12 @@ class TicketSeeder extends Seeder
 
             $ticket->stateHistories()->attach($ticketState->id, ['is_current' => true]);
 
-            $ticket->users()->create([
+            $ticket->ticketUsers()->create([
                 'user_id' => $requester->id,
                 'ticket_user_role_id' => $requesterRole->id,
             ]);
 
-            $ticket->users()->create([
+            $ticket->ticketUsers()->create([
                 'user_id' => $technician->id,
                 'ticket_user_role_id' => $technicianRole->id,
             ]);

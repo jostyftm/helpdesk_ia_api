@@ -27,6 +27,20 @@ class TicketListRequest extends FormRequest
     {
         return [
             /**
+             * Allow filtering by id
+             * 
+             * @example 1
+             */
+            'filter.id' => ['sometimes', 'integer'],
+
+            /**
+             * Allow filtering by user_id
+             * 
+             * @example 1
+             */
+            'filter.user_id' => ['sometimes', 'integer', 'exists:users,id'],
+
+            /**
              * Allow filtering by subject
              * 
              * @example subject

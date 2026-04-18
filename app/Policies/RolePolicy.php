@@ -13,7 +13,7 @@ class RolePolicy
      */
     public function viewAny(User $user): bool
     {
-        Log::info('Checking viewAny permission for user: ' . json_encode($user, JSON_PRETTY_PRINT));
+        Log::info('Checking viewAny permission for user: ' . $user->hasAnyPermission(['all.access', 'roles.read']));
         return $user->hasAnyPermission(['all.access', 'roles.read']);
     }
 

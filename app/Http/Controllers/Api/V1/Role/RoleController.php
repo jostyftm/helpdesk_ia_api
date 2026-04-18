@@ -20,8 +20,7 @@ class RoleController extends Controller
 
     public function __construct(
         public readonly RoleService $roleService
-    ) {   
-    }
+    ) {}
 
     /**
      * List all roles.
@@ -34,8 +33,8 @@ class RoleController extends Controller
     public function index(RoleListRequest $request): AnonymousResourceCollection
     {
         //
-        $this->authorize('viewAny', Role::class);
-        
+        // $this->authorize('viewAny', Role::class);
+
         $roles = $this->roleService->index($request);
 
         return RoleResource::collection($roles);
@@ -51,12 +50,12 @@ class RoleController extends Controller
      */
     public function store(RoleCreateRequest $request): JsonResource
     {
-        $this->authorize('create', Role::class);
+        // $this->authorize('create', Role::class);
 
         $role = $this->roleService->store($request);
 
         return RoleResource::make($role);
-     }
+    }
 
     /**
      * Show Role
@@ -68,7 +67,7 @@ class RoleController extends Controller
      */
     public function show(Role $role): JsonResource
     {
-        $this->authorize('view', $role);
+        // $this->authorize('view', $role);
 
         $role = $this->roleService->show($role);
 
@@ -86,12 +85,12 @@ class RoleController extends Controller
      */
     public function update(RoleUpdateRequest $request, Role $role): JsonResource
     {
-        $this->authorize('update', $role);
+        // $this->authorize('update', $role);
 
         $role = $this->roleService->update($request, $role);
 
         return RoleResource::make($role);
-     }
+    }
 
     /**
      * Delete Role
@@ -103,7 +102,7 @@ class RoleController extends Controller
      */
     public function destroy(Role $role): Response
     {
-        $this->authorize('delete', $role);
+        // $this->authorize('delete', $role);
 
         $this->roleService->destroy($role);
 
@@ -120,7 +119,7 @@ class RoleController extends Controller
      */
     public function permissions(Role $role): JsonResource
     {
-        $this->authorize('view', $role);
+        // $this->authorize('view', $role);
 
         $permissions = $this->roleService->permissions($role);
 
@@ -138,9 +137,9 @@ class RoleController extends Controller
      */
     public function syncPermissions(SyncPermissionRequest $request, Role $role): JsonResource
     {
-        $this->authorize('update', $role);
+        // $this->authorize('update', $role);
 
-        $this->roleService->syncPermissions($request,$role);
+        $this->roleService->syncPermissions($request, $role);
 
         return RoleResource::make($role);
     }

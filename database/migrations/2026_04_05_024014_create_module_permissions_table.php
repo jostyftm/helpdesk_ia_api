@@ -13,9 +13,12 @@ return new class extends Migration
     {
         Schema::create('module_permissions', function (Blueprint $table) {
             $table->id();
+            $table->integer('order')->default(0);
             $table->string('name')->unique();
+            $table->string('path')->unique();
             $table->string('description')->nullable();
             $table->string('icon')->nullable();
+            $table->boolean('show_sidebar')->default(true);
             $table->timestamps();
         });
     }
